@@ -1,5 +1,5 @@
-using System;
-using System.Threading;
+using System; 
+using System.Threading; 
 
 namespace cadastroPessoa
 {
@@ -58,9 +58,10 @@ namespace cadastroPessoa
                                         endpj.complemento = "loja de esquina";
                                         endpj.enderecocomerci = true;
 
-                                        novaPj.endereco = "endpj";
+                                        novaPj.endereco = endpj;
                                         novaPj.cnpj = "12345678900001";
-                                        novaPj.razaoSocial = "pessoajuridica";
+                                        novaPj.rendimento = 10000; 
+                                        novaPj.razaoSocial = "pessoa juridica";
             
                                         if (!pJ.ValidarCNPJ(novaPj.cnpj))
                                         {
@@ -70,6 +71,9 @@ namespace cadastroPessoa
                                         {
                                              Console.WriteLine("CNPJ inválido");
                                         }
+
+                                        Console.WriteLine(pJ.PagarImposto(novaPj.rendimento).ToString("N2"));
+                                        
 
                                                 break;
 
@@ -83,8 +87,10 @@ namespace cadastroPessoa
                                         endpf.complemento = "proximo ao hospital";
                                         endpf.enderecocomerci = false;
             
-                                        novapF.endereco = "endpf";
-                                        novapF.cpf = "12345678901";
+                                        novapF.endereco = endpf;
+                                        novapF.cpf = "123456789";
+                                        novapF.nome = "Pessoa fisica"; 
+                                        novapF.rendimento = 1500; 
                                         novapF.dataNasci = new DateTime(2000, 26, 01);
              
                                         Console.WriteLine(novapF.endereco);
@@ -107,6 +113,9 @@ namespace cadastroPessoa
                                          Console.WriteLine($"Falha no cadastro, não é possivel cadastrar pessoas menores de idade");
 
                                         }
+
+                                        Console.WriteLine(pF.PagarImposto(novapF.rendimento));
+                                        
 
 
                                         break;
