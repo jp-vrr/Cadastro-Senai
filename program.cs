@@ -1,5 +1,7 @@
-using System; 
+using System;
+using System.Collections.Generic;
 using System.Threading; 
+
 
 namespace cadastroPessoa
 {
@@ -8,6 +10,8 @@ namespace cadastroPessoa
         static void Main(string[] args)
         {     
             string opcao; 
+            List<PessoaFisica> Listapf = new List<PessoaFisica>();
+            List<PessoaJuridica> Listapj = new List<PessoaJuridica>();
 
             Console.Clear(); 
             Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -33,8 +37,16 @@ namespace cadastroPessoa
                   /        Escolha uma opção a seguir:         /
                   ==============================================
                   /                                            /
-                  /         1. Pessoa Juridica                 / 
-                  /         2. Pessoa FIsica                   / 
+                  /            Pessoa Juridica                 / 
+                  /         1- Cadastrar Pessoa Jurídica       /
+                  /         2- Listar Pessoa Jurídica          /
+                  /         3- Remover Pessoa Jurídica         /
+                  /                                            /
+                  /            Pessoa FIsica                   /
+                  /         4- Cadastrar Pessoa Física         /
+                  /         5- Listar Pessoa Física            /
+                  /         6- Remover Pessoa Física           /
+                  /                                            /
                   /                                            / 
                   /         0. Sair                            /
                   /                                            / 
@@ -53,58 +65,136 @@ namespace cadastroPessoa
                                         PessoaJuridica novaPj = new PessoaJuridica();
                                         Endereco endpj = new Endereco();
 
-                                        endpj.logradouro = "Rua z";
-                                        endpj.numero = 155;
-                                        endpj.complemento = "loja de esquina";
-                                        endpj.enderecocomerci = true;
+                                        Console.WriteLine($"Qual o seu nome/empresa?");
+                                        novaPj.nome = Console.ReadLine();
+                                        
+
+                                        Console.WriteLine($"Digite seu logradouro:");
+                                        endpj.logradouro = Console.ReadLine();
+
+                                        Console.WriteLine($"Digite o número do seu logradouro:");
+                                        endpj.numero = int.Parse(Console.ReadLine());
+                                        
+                                        Console.WriteLine($"Digite o complemento do seu logradouro(Se quiser manter vazio aperte Enter)");
+                                        endpj.complemento = Console.ReadLine();
+                                        
+                                        Console.WriteLine($"Seu endereço é comercial? S/N");
+                                        string Enderecocomercial = Console.ReadLine().ToUpper();
+                                        
+                                        if(Enderecocomercial == "S")
+                                        {
+                                            endpj.enderecocomerci = true;
+
+                                        } else 
+                                        {
+                                            endpj.enderecocomerci = false; 
+                                        }
+                                        
 
                                         novaPj.endereco = endpj;
-                                        novaPj.cnpj = "12345678900001";
-                                        novaPj.rendimento = 10000; 
+
+                                        Console.WriteLine($"Digite seu CNPJ:");
+                                        novaPj.cnpj = Console.ReadLine(); 
+                                        
+                                        Console.WriteLine($"Digite seu rendimento:");
+                                        novaPj.rendimento = int.Parse(Console.ReadLine());
+                                        
                                         novaPj.razaoSocial = "pessoa juridica";
             
                                         if (!pJ.ValidarCNPJ(novaPj.cnpj))
                                         {
                                             Console.WriteLine($"CNPJ válido");
+                                            Listapj.Add(novaPj);
+                                            Console.WriteLine(pJ.PagarImposto(novaPj.rendimento).ToString("N2"));
                                          }
                                          else
                                         {
                                              Console.WriteLine("CNPJ inválido");
                                         }
 
-                                        Console.WriteLine(pJ.PagarImposto(novaPj.rendimento).ToString("N2"));
+                                        
                                         
 
-                                                break;
+                                        break;
 
                                 case "2":
+
+                                        foreach (var cadaItem in Listapj)
+                                        {
+                                            Console.WriteLine($"{cadaItem.nome}, {cadaItem.cnpj}");
+                                            
+                                        }
+
+                                        break;
+
+                                case "3":
+
+                                        Console.WriteLine($"Digite o CNPJ que quer remover:");
+                                        string cnpjprocurado = Console.ReadLine();
+
+                                        PessoaJuridica PessoaEncontrada = Listapj.Find(cadaitem => cadaitem.cnpj == cnpjprocurado);
+                                        if(PessoaEncontrada != null)
+                                        {
+                                            Listapj.Remove(PessoaEncontrada);
+                                            Console.WriteLine($"Cadastro removido");
+                                            
+
+                                        }else{
+
+                                            Console.WriteLine($"Cadastro não encontrado");
+                                            
+                                        }
+
+                                        
+
+                                        break;
+
+                                case "4":
                                         PessoaFisica pF = new PessoaFisica();
                                         PessoaFisica novapF = new PessoaFisica();
                                         Endereco endpf = new Endereco();
 
-                                        endpf.logradouro = "Rua x";
-                                        endpf.numero = 789;
-                                        endpf.complemento = "proximo ao hospital";
-                                        endpf.enderecocomerci = false;
+                                        Console.WriteLine($"Digite seu logradouro:");
+                                        endpf.logradouro = Console.ReadLine();
+                                        
+                                        Console.WriteLine($"Digite o número do seu logradouro:");
+                                        endpf.numero = int.Parse(Console.ReadLine());
+                                        
+                                        Console.WriteLine($"Digite um complemento(aperte Enter se quiser manter vazio):");
+                                        endpf.complemento = Console.ReadLine();
+                                        Console.WriteLine($"Seu endereço é comercial? S/N ");
+                                        string endComercial = Console.ReadLine().ToUpper();
+
+                                        if (endComercial == "S")
+                                        {
+                                            endpf.enderecocomerci = true;
+                                        }else{
+                                            endpf.enderecocomerci = false; 
+                                        }
+                                        
             
                                         novapF.endereco = endpf;
-                                        novapF.cpf = "123456789";
-                                        novapF.nome = "Pessoa fisica"; 
-                                        novapF.rendimento = 1500; 
-                                        novapF.dataNasci = new DateTime(2000, 26, 01);
-             
-                                        Console.WriteLine(novapF.endereco);
-                                        Console.WriteLine(novapF.cpf);
-                                        Console.WriteLine(novapF.dataNasci);
-                
-                
-                
+
+                                        Console.WriteLine($"Digite seu CPF(somente números):");
+                                        novapF.cpf = Console.ReadLine();
+                                    
+                                        Console.WriteLine($"Digite seu nome:");
+                                        novapF.nome = Console.ReadLine();
+                                        
+                                        Console.WriteLine($"Qual o seu rendimento?(somente números)");
+                                        novapF.rendimento = float.Parse(Console.ReadLine());
+
+                                        Console.WriteLine($"Digite sua data de nascimento:");
+                                        novapF.dataNasci = DateTime.Parse(Console.ReadLine());
+    
                                         bool idadeValida = pF.ValidarDataNascimento(novapF.dataNasci);
 
                                         if (idadeValida == true)
                                         {
 
                                         Console.WriteLine($"Cadastro concluido");
+                                        Listapf.Add(novapF);
+                                        Console.WriteLine(pF.PagarImposto(novapF.rendimento));
 
                                         }
                                          else
@@ -114,11 +204,44 @@ namespace cadastroPessoa
 
                                         }
 
-                                        Console.WriteLine(pF.PagarImposto(novapF.rendimento));
+                                        
                                         
 
 
                                         break;
+
+                                case "5":
+
+                                foreach (var cadaitem in Listapf)
+                                {
+                                    Console.WriteLine($"{cadaitem.nome}, {cadaitem.cpf}, {cadaitem.endereco.logradouro}");
+                                    
+                                    
+                                }
+
+
+                                        break;
+
+                                case "6":
+                                        Console.WriteLine($"Digite o CPF que deseja remover");
+                                        string cpfprocurado = Console.ReadLine();
+
+                                        PessoaFisica Pessoaencontrada = Listapf.Find(cadaitem => cadaitem.cpf == cpfprocurado);
+                                        if(Pessoaencontrada != null)
+                                        {
+                                            Listapf.Remove(Pessoaencontrada);
+                                            Console.WriteLine($"Cadastro removido");
+                                            
+
+                                        }else{
+
+                                            Console.WriteLine($"Cadastro não encontrado");
+                                            
+                                        }
+                                        
+                                        
+
+                                        break; 
 
                                 case "0":
                                         
