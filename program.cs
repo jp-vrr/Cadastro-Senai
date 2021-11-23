@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Threading; 
+using System.Threading;
+using System.IO;  
+
 
 
 namespace cadastroPessoa
@@ -54,6 +56,9 @@ namespace cadastroPessoa
                   ");
 
                             opcao = Console.ReadLine();
+                            PessoaJuridica pJ = new PessoaJuridica();
+                            PessoaJuridica novaPj = new PessoaJuridica();
+                            Endereco endpj = new Endereco();
 
                             switch(opcao)
                             {
@@ -61,9 +66,6 @@ namespace cadastroPessoa
 
 
                                         Console.ResetColor();
-                                        PessoaJuridica pJ = new PessoaJuridica();
-                                        PessoaJuridica novaPj = new PessoaJuridica();
-                                        Endereco endpj = new Endereco();
 
                                         Console.WriteLine($"Qual o seu nome/empresa?");
                                         novaPj.nome = Console.ReadLine();
@@ -106,12 +108,27 @@ namespace cadastroPessoa
                                             Console.WriteLine($"CNPJ válido");
                                             Listapj.Add(novaPj);
                                             Console.WriteLine(pJ.PagarImposto(novaPj.rendimento).ToString("N2"));
-                                         }
+                                        }
                                          else
                                         {
                                              Console.WriteLine("CNPJ inválido");
-                                        }
+                                        }       
 
+                                        pJ.VerificarArquivo(pJ.caminho);
+                                        pJ.Inserir(novaPj);
+                                        
+                                        
+                                        //if (pJ.Ler().Count > 0)
+                                        //{
+                                        //    foreach(var item in pJ.Ler())
+                                        //{
+                                        //    Console.WriteLine($"nome: {item.nome} - Razão Social: {item.razaoSocial} - CNPJ: {item.cnpj}");
+                                        //}
+                                        //} else {
+                                        //    Console.WriteLine($"Lista vazia!");
+                                            
+                                        //}
+                                        
                                         
                                         
 
@@ -119,9 +136,21 @@ namespace cadastroPessoa
 
                                 case "2":
 
-                                        foreach (var cadaItem in Listapj)
+                                        //foreach (var cadaItem in Listapj)
+                                        //{
+                                        //    Console.WriteLine($"{cadaItem.nome}, {cadaItem.cnpj}");
+                                            
+                                        //}
+                                        
+                                        
+                                        if (Listapj.Count > 0)
                                         {
-                                            Console.WriteLine($"{cadaItem.nome}, {cadaItem.cnpj}");
+                                            foreach(var item in Listapj)
+                                        {
+                                            Console.WriteLine($"nome: {item.nome} - Razão Social: {item.razaoSocial} - CNPJ: {item.cnpj}");
+                                        }
+                                        } else {
+                                            Console.WriteLine($"Lista vazia!");
                                             
                                         }
 
@@ -154,6 +183,9 @@ namespace cadastroPessoa
                                         PessoaFisica novapF = new PessoaFisica();
                                         Endereco endpf = new Endereco();
 
+                                        Console.Clear();
+                                        Console.ForegroundColor = ConsoleColor.Gray; 
+
                                         Console.WriteLine($"Digite seu logradouro:");
                                         endpf.logradouro = Console.ReadLine();
                                         
@@ -162,6 +194,7 @@ namespace cadastroPessoa
                                         
                                         Console.WriteLine($"Digite um complemento(aperte Enter se quiser manter vazio):");
                                         endpf.complemento = Console.ReadLine();
+                                        
                                         Console.WriteLine($"Seu endereço é comercial? S/N ");
                                         string endComercial = Console.ReadLine().ToUpper();
 
@@ -204,7 +237,33 @@ namespace cadastroPessoa
 
                                         }
 
+                                        StreamWriter sw = new StreamWriter($"{novapF.nome}.txt");
+                                        sw.WriteLine($"{novapF.nome}");
+                                        sw.Close();  
+
+                                        //using (StreamWriter sw = new StreamWriter($"{novapF.nome}.txt"))
+                                        //{
+                                        //    sw.WriteLine($"{novapF.nome}, {novapF.cpf}, {novapF.dataNasci}");
+                                             
+                                        //}
+
+                                        //using (StreamReader sr = new StreamReader($"{novapF.nome}.txt"))
+                                        //{
+                                        //    string linha; //Sting criada para verificar se existe algo alvo no documento.
+                                                
+                                        //        while ((linha = sr.ReadLine()) != null) 
+                                                //Criação de laço para a comparação,usamos os parenteses para indicar quem será executado primeiro
+                                                // (!= null) quer dizer diferente de nulo/0
+                                        //        { 
+                                        //            Console.WriteLine($"{linha}");
+                                                    
+                                        //        }
+
                                         
+                                        //}
+
+
+
                                         
 
 
